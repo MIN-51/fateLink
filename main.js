@@ -100,7 +100,7 @@ class SajuResultDisplay extends HTMLElement {
                     color: #e0e0e0;
                     display: none; /* Initially hidden */
                 }
-                 h2, h3 {
+                h2, h3 {
                     color: #f0c479;
                     text-align: center;
                     margin-bottom: 20px;
@@ -108,19 +108,92 @@ class SajuResultDisplay extends HTMLElement {
                 p {
                     line-height: 1.6;
                 }
+                #month-buttons {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    justify-content: center;
+                    margin-bottom: 20px;
+                }
+                #month-buttons button {
+                    padding: 8px 12px;
+                    border-radius: 5px;
+                    border: 1px solid #f0c479;
+                    background-color: transparent;
+                    color: #f0c479;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+                #month-buttons button:hover, #month-buttons button.active {
+                    background-color: #f0c479;
+                    color: #1a233a;
+                }
+                #monthly-fortune-text {
+                    text-align: center;
+                    min-height: 40px;
+                }
             </style>
             <div id="result-container">
                 <h2>사주 분석 결과</h2>
                 <p id="result-text"></p>
+                
+                <div id="monthly-fortune-section">
+                    <h3>월별 운세</h3>
+                    <p>확인하고 싶은 월을 선택하세요.</p>
+                    <div id="month-buttons"></div>
+                    <p id="monthly-fortune-text"></p>
+                </div>
             </div>
         `;
+
+        this.monthButtonsContainer = this.shadowRoot.querySelector('#month-buttons');
+        this.monthlyFortuneText = this.shadowRoot.querySelector('#monthly-fortune-text');
+
+        this._createMonthButtons();
+        this._attachEventListeners();
+    }
+
+    _createMonthButtons() {
+        for (let i = 1; i <= 12; i++) {
+            const button = document.createElement('button');
+            button.textContent = `${i}월`;
+            button.dataset.month = i;
+            this.monthButtonsContainer.appendChild(button);
+        }
+    }
+
+    _attachEventListeners() {
+        this.monthButtonsContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const month = e.target.dataset.month;
+                this._showMonthlyFortune(month);
+
+                // Update active button style
+                this.monthButtonsContainer.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            }
+        });
+    }
+
+    _showMonthlyFortune(month) {
+        this.monthlyFortuneText.textContent = getMonthlyFortune(parseInt(month, 10));
     }
 
     displayResult(result) {
         const resultContainer = this.shadowRoot.querySelector('#result-container');
         const resultText = this.shadowRoot.querySelector('#result-text');
-        resultText.innerHTML = result; // Allow HTML for formatting
+        resultText.innerHTML = result; // Support HTML for basic formatting
         resultContainer.style.display = 'block';
+
+        // Set default to current month
+        const currentMonth = new Date().getMonth() + 1;
+        const currentMonthButton = this.monthButtonsContainer.querySelector(`[data-month="${currentMonth}"]`);
+        if (currentMonthButton) {
+            currentMonthButton.click();
+        }
     }
 }
 
@@ -171,12 +244,6 @@ function analyzeSaju(sajuData) {
 
     const timeNames = ["자시", "축시", "인시", "묘시", "진시", "사시", "오시", "미시", "신시", "유시", "술시", "해시"];
     fortune += ` 태어난 시간은 ${timeNames[time]}로, 이 시간에 태어난 사람은 지혜롭고 통찰력이 뛰어납니다.`;
-
-    // Add monthly fortunes
-    fortune += "<br><br><h3>월별 운세</h3>";
-    for (let i = 1; i <= 12; i++) {
-        fortune += getMonthlyFortune(i) + "<br>";
-    }
 
     return fortune;
 }
