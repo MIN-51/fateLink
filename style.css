@@ -49,20 +49,43 @@ header {
 
 #theme-toggle {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 15px; /* Adjusted spacing */
+    right: 15px; /* Adjusted spacing */
     background: transparent;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
-    width: 40px;
+    width: 70px; /* Increased width to accommodate both icons with spacing */
     height: 40px;
-    border-radius: 50%;
+    border-radius: 20px; /* More rounded shape for the wider button */
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s, color 0.3s;
+    display: flex; /* Use flexbox to center icons */
+    align-items: center;
+    justify-content: space-around; /* Distribute space around icons */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, width 0.3s, border-radius 0.3s;
 }
 
 #theme-toggle:hover {
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+}
+
+#theme-toggle span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Size of the circle/icon area */
+    height: 30px;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body:not(.light-theme) #theme-toggle #moon-icon {
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+}
+
+body.light-theme #theme-toggle #sun-icon {
     background-color: var(--primary-color);
     color: var(--button-text-color);
 }
