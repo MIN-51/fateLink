@@ -77,10 +77,10 @@ class SajuInputForm extends HTMLElement {
             const formData = new FormData(e.target);
             const sajuData = {
                 gender: formData.get('gender'),
-                year: formData.get('year'),
-                month: formData.get('month'),
-                day: formData.get('day'),
-                time: formData.get('time'),
+                year: parseInt(formData.get('year'), 10),
+                month: parseInt(formData.get('month'), 10),
+                day: parseInt(formData.get('day'), 10),
+                time: parseInt(formData.get('time'), 10),
             };
             this.dispatchEvent(new CustomEvent('sajuSubmit', { detail: sajuData, bubbles: true, composed: true }));
         });
@@ -152,7 +152,7 @@ function analyzeSaju(sajuData) {
     }
 
     const timeNames = ["자시", "축시", "인시", "묘시", "진시", "사시", "오시", "미시", "신시", "유시", "술시", "해시"];
-    fortune += ` 태어난 시간은 ${timeNames[time]}로, 이 시간에 태어nan 사람은 지혜롭고 통찰력이 뛰어납니다.`;
+    fortune += ` 태어난 시간은 ${timeNames[time]}로, 이 시간에 태어난 사람은 지혜롭고 통찰력이 뛰어납니다.`;
 
     return fortune;
 }
