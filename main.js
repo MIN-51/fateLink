@@ -233,7 +233,8 @@ function analyzeSaju(sajuData) {
     const zodiacs = ["원숭이", "닭", "개", "돼지", "쥐", "소", "호랑이", "토끼", "용", "뱀", "말", "양"];
     const zodiac = zodiacs[year % 12];
 
-    let fortune = `당신은 ${year}년 ${month}월 ${day}일에 태어난 ${gender === 'male' ? '남성' : '여성'}이시군요.`;
+    let fortune = `<h3>${year}년 ${month}월 ${day}일 ${timeNames[time]}에 태어난 당신의 사주를 분석해 드립니다.</h3><br>`;
+    fortune += `당신은 ${year}년 ${month}월 ${day}일에 태어난 ${gender === 'male' ? '남성' : '여성'}이시군요.`;
     fortune += ` 당신의 띠는 ${zodiac}입니다.`;
 
     // Simplified fortune telling logic
