@@ -100,7 +100,7 @@ class SajuResultDisplay extends HTMLElement {
                     color: #e0e0e0;
                     display: none; /* Initially hidden */
                 }
-                 h2 {
+                 h2, h3 {
                     color: #f0c479;
                     text-align: center;
                     margin-bottom: 20px;
@@ -119,7 +119,7 @@ class SajuResultDisplay extends HTMLElement {
     displayResult(result) {
         const resultContainer = this.shadowRoot.querySelector('#result-container');
         const resultText = this.shadowRoot.querySelector('#result-text');
-        resultText.textContent = result;
+        resultText.innerHTML = result; // Allow HTML for formatting
         resultContainer.style.display = 'block';
     }
 }
@@ -133,6 +133,24 @@ document.addEventListener('sajuSubmit', (e) => {
     const resultDisplay = document.querySelector('saju-result-display');
     resultDisplay.displayResult(fortune);
 });
+
+function getMonthlyFortune(month) {
+    switch (month) {
+        case 1: return "1월: 새로운 시작의 달입니다. 계획을 세우고 실천에 옮기기 좋은 시기입니다.";
+        case 2: return "2월: 인간관계에 좋은 기운이 깃듭니다. 새로운 인연을 만나거나 기존 관계가 깊어질 수 있습니다.";
+        case 3: return "3월: 창의적인 활동에 좋은 성과가 기대됩니다. 예술적인 영감을 발휘해 보세요.";
+        case 4: return "4월: 따뜻한 봄기운과 함께 활동적인 에너지가 넘칩니다. 야외 활동을 즐기세요.";
+        case 5: return "5월: 금전적인 행운이 따를 수 있습니다. 신중한 투자는 좋은 결과로 이어질 수 있습니다.";
+        case 6: return "6월: 학업이나 업무에 집중하기 좋은 시기입니다. 꾸준한 노력이 결실을 맺을 것입니다.";
+        case 7: return "7월: 여행을 떠나기 좋은 달입니다. 새로운 경험을 통해 재충전의 시간을 가지세요.";
+        case 8: return "8월: 건강에 유의해야 할 시기입니다. 충분한 휴식과 규칙적인 생활 습관이 중요합니다.";
+        case 9: return "9월: 풍성한 결실의 계절, 그동안의 노력이 좋은 결과로 나타날 것입니다.";
+        case 10: return "10월: 마음의 안정이 필요한 시기입니다. 명상이나 독서를 통해 내면을 돌보세요.";
+        case 11: return "11월: 변화의 기운이 강합니다. 새로운 도전을 두려워하지 마세요.";
+        case 12: return "12월: 한 해를 마무리하며 주변 사람들에게 감사의 마음을 전하기 좋은 시기입니다.";
+        default: return "";
+    }
+}
 
 function analyzeSaju(sajuData) {
     const { year, month, day, time, gender } = sajuData;
@@ -153,6 +171,12 @@ function analyzeSaju(sajuData) {
 
     const timeNames = ["자시", "축시", "인시", "묘시", "진시", "사시", "오시", "미시", "신시", "유시", "술시", "해시"];
     fortune += ` 태어난 시간은 ${timeNames[time]}로, 이 시간에 태어난 사람은 지혜롭고 통찰력이 뛰어납니다.`;
+
+    // Add monthly fortunes
+    fortune += "<br><br><h3>월별 운세</h3>";
+    for (let i = 1; i <= 12; i++) {
+        fortune += getMonthlyFortune(i) + "<br>";
+    }
 
     return fortune;
 }
