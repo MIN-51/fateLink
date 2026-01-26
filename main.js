@@ -12,28 +12,29 @@ class SajuInputForm extends HTMLElement {
                 }
                 label {
                     font-size: 1.1rem;
-                    color: #f0c479;
+                    color: var(--primary-color);
                 }
                 input, select {
                     padding: 10px;
                     border-radius: 5px;
-                    border: 1px solid #f0c479;
-                    background-color: #1a233a;
-                    color: #e0e0e0;
+                    border: 1px solid var(--primary-color);
+                    background-color: var(--input-bg-color);
+                    color: var(--text-color);
                     font-size: 1rem;
+                    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
                 }
                 button {
                     padding: 12px;
                     border-radius: 5px;
                     border: none;
-                    background-color: #f0c479;
-                    color: #1a233a;
+                    background-color: var(--primary-color);
+                    color: var(--button-text-color);
                     font-size: 1.2rem;
                     cursor: pointer;
-                    transition: background-color 0.3s;
+                    transition: background-color 0.3s, color 0.3s;
                 }
                 button:hover {
-                    background-color: #d4a660;
+                    background-color: var(--primary-color-hover);
                 }
             </style>
             <form id="saju-form">
@@ -96,14 +97,16 @@ class SajuResultDisplay extends HTMLElement {
                 #result-container {
                     padding: 20px;
                     border-radius: 10px;
-                    background-color: #1a233a;
-                    color: #e0e0e0;
+                    background-color: var(--component-bg-color);
+                    color: var(--text-color);
                     display: none; /* Initially hidden */
+                    transition: background-color 0.3s, color 0.3s;
                 }
                 h2, h3 {
-                    color: #f0c479;
+                    color: var(--primary-color);
                     text-align: center;
                     margin-bottom: 20px;
+                    transition: color 0.3s;
                 }
                 p {
                     line-height: 1.6;
@@ -118,16 +121,16 @@ class SajuResultDisplay extends HTMLElement {
                 #month-buttons button {
                     padding: 8px 12px;
                     border-radius: 5px;
-                    border: 1px solid #f0c479;
+                    border: 1px solid var(--primary-color);
                     background-color: transparent;
-                    color: #f0c479;
+                    color: var(--primary-color);
                     font-size: 0.9rem;
                     cursor: pointer;
-                    transition: background-color 0.3s, color 0.3s;
+                    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
                 }
                 #month-buttons button:hover, #month-buttons button.active {
-                    background-color: #f0c479;
-                    color: #1a233a;
+                    background-color: var(--primary-color);
+                    color: var(--button-text-color);
                 }
                 #monthly-fortune-text {
                     text-align: center;
@@ -247,3 +250,24 @@ function analyzeSaju(sajuData) {
 
     return fortune;
 }
+
+// Theme switching logic
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        body.classList.add('light-theme');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        if (body.classList.contains('light-theme')) {
+            localStorage.setItem('theme', 'light');
+        } else {
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+});
