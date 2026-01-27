@@ -30,7 +30,10 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding-top: 20px; /* Adjusted padding for top space */
+    padding-bottom: 20px; /* Padding for bottom space */
+    padding-left: 20px;
+    padding-right: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,12 +43,46 @@ body {
 
 header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px; /* Adjusted margin */
     position: relative;
     width: 100%;
     padding-top: 20px; /* Added for spacing */
     padding-right: 20px; /* Added for spacing */
 }
+
+nav {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--component-bg-color);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--component-border-color);
+    padding: 10px 0;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav ul li a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: var(--primary-color-hover);
+}
+
 
 #theme-toggle {
     position: absolute;
@@ -188,4 +225,111 @@ footer a {
 footer a:hover {
     color: var(--primary-color-hover);
     text-decoration: underline;
+}
+
+#blog-posts {
+    width: 100%;
+    max-width: 500px;
+}
+
+#blog-posts article {
+    background-color: var(--component-bg-color);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--component-border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#blog-posts article h3 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+#blog-posts article h3 a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+#blog-posts article h3 a:hover {
+    color: var(--primary-color-hover);
+    text-decoration: underline;
+}
+
+#blog-posts article p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.blog-article {
+    width: 100%;
+    max-width: 700px; /* Wider for article content */
+    background-color: var(--component-bg-color);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--component-border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.blog-article h2, .blog-article h3 {
+    text-align: left;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    transition: color 0.3s;
+}
+
+.blog-article h3 {
+    font-size: 1.4rem;
+}
+
+.blog-article p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1em;
+}
+
+.blog-article strong {
+    color: var(--primary-color);
+}
+
+.read-more {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.read-more:hover {
+    background-color: var(--primary-color-hover);
+}
+
+/* Responsive adjustments for blog content */
+@media (max-width: 600px) {
+    #blog-posts article h3 {
+        font-size: 1.3rem;
+    }
+    .blog-article h2 {
+        font-size: 1.5rem;
+    }
+    .blog-article h3 {
+        font-size: 1.2rem;
+    }
+    .blog-article p {
+        font-size: 1rem;
+    }
+    .blog-article {
+        padding: 20px;
+    }
 }
