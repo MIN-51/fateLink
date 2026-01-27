@@ -268,16 +268,17 @@ customElements.define('saju-result-display', SajuResultDisplay);
 
 document.addEventListener('sajuSubmit', (e) => {
     const sajuData = e.detail;
+    const resultDisplay = document.querySelector('saju-result-display'); // Moved outside try/catch
     let fortune = ""; // Initialize to prevent reference error
     try {
         fortune = analyzeSaju(sajuData);
         console.log("Generated Fortune:", fortune); // Debugging line
+        resultDisplay.displayResult(fortune);
+
     } catch (error) {
-        console.error("Error analyzing Saju:", error); // Debugging error
-        fortune = "<p style='color: red;'>운세 분석 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</p>";
+        console.error("Error during Saju processing or display:", error); // Debugging error
+        resultDisplay.displayResult("<p style='color: red;'>운세 분석 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</p>");
     }
-    const resultDisplay = document.querySelector('saju-result-display');
-    resultDisplay.displayResult(fortune);
 });
 
 function getMonthlyFortune(month) {
