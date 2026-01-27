@@ -358,6 +358,32 @@ const mbtiResults = {
     "ENTJ": "대담한 통솔자, 비전을 가지고 진두지휘하는 리더"
 };
 
+// Tarot Cards and Meanings (Major Arcana for simplicity)
+const majorArcanaTarotCards = [
+    { name: "0. 바보 (The Fool)", meaning: "새로운 시작, 자유, 모험, 순수함, 잠재력" },
+    { name: "I. 마법사 (The Magician)", meaning: "능력, 의지력, 창조성, 숙련된 기술, 행동" },
+    { name: "II. 고위 여사제 (The High Priestess)", meaning: "직관, 신비, 잠재의식, 지혜, 비밀" },
+    { name: "III. 여황제 (The Empress)", meaning: "풍요, 모성, 자연, 아름다움, 창조력" },
+    { name: "IV. 황제 (The Emperor)", meaning: "권위, 통제, 구조, 리더십, 안정성" },
+    { name: "V. 교황 (The Hierophant)", meaning: "전통, 종교, 신념, 교육, 조언" },
+    { name: "VI. 연인 (The Lovers)", meaning: "사랑, 관계, 선택, 조화, 가치" },
+    { name: "VII. 전차 (The Chariot)", meaning: "승리, 의지, 통제, 결단력, 진전" },
+    { name: "VIII. 힘 (Strength)", meaning: "용기, 인내, 자기 통제, 부드러운 힘" },
+    { name: "IX. 은둔자 (The Hermit)", meaning: "성찰, 고독, 탐구, 내면의 지혜" },
+    { name: "X. 운명의 수레바퀴 (Wheel of Fortune)", meaning: "운명, 전환점, 행운, 변화, 주기" },
+    { name: "XI. 정의 (Justice)", meaning: "정의, 균형, 진실, 공정함, 원인과 결과" },
+    { name: "XII. 매달린 남자 (The Hanged Man)", meaning: "희생, 관점 전환, 새로운 시각, 인내" },
+    { name: "XIII. 죽음 (Death)", meaning: "끝, 변화, 변형, 재생, 놓아줌" },
+    { name: "XIV. 절제 (Temperance)", meaning: "균형, 조화, 인내, 중용, 목적" },
+    { name: "XV. 악마 (The Devil)", meaning: "속박, 물질주의, 유혹, 중독, 그림자 자아" },
+    { name: "XVI. 탑 (The Tower)", meaning: "붕괴, 파괴, 계시, 갑작스러운 변화" },
+    { name: "XVII. 별 (The Star)", meaning: "희망, 영감, 평온, 재생, 영성" },
+    { name: "XVIII. 달 (The Moon)", meaning: "환상, 직관, 잠재의식, 혼란, 불확실성" },
+    { name: "XIX. 태양 (The Sun)", meaning: "성공, 기쁨, 활력, 진실, 깨달음" },
+    { name: "XX. 심판 (Judgement)", meaning: "회복, 재생, 자기 평가, 각성, 새로운 시작" },
+    { name: "XXI. 세계 (The World)", meaning: "완성, 성취, 통합, 여행, 만족" }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
@@ -379,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // MBTI Test Logic
     const mbtiTestSection = document.getElementById('mbti-test-section');
     if (mbtiTestSection) {
+        console.log("MBTI Test logic initiated."); // Debug log
         const mbtiQuestionsContainer = document.getElementById('mbti-questions');
         const mbtiStartButton = document.getElementById('mbti-start-button');
         const mbtiSubmitButton = document.getElementById('mbti-submit-button');
@@ -389,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let score = { "E": 0, "I": 0, "S": 0, "N": 0, "T": 0, "F": 0, "J": 0, "P": 0 };
 
         function renderQuestions() {
+            console.log("renderQuestions called."); // Debug log
             mbtiQuestionsContainer.innerHTML = '';
             mbtiQuestions.forEach((qData, qIndex) => {
                 const questionElement = document.createElement('div');
@@ -401,46 +429,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     const button = document.createElement('button');
                     button.textContent = option.text;
                     button.classList.add('mbti-option-button');
+                    button.dataset.questionIndex = qIndex;
+                    button.dataset.optionIndex = oIndex;
                     if (userSelections[qIndex] === oIndex) {
                         button.classList.add('selected');
                     }
-                    button.addEventListener('click', () => selectOption(qIndex, oIndex, option.type));
+                    button.addEventListener('click', () => selectOption(qIndex, oIndex, option.type, button));
                     optionsContainer.appendChild(button);
                 });
                 questionElement.appendChild(optionsContainer);
                 mbtiQuestionsContainer.appendChild(questionElement);
             });
             mbtiSubmitButton.style.display = 'none'; // Hide submit until all answered
+            checkAllQuestionsAnswered(); // Initial check
+            console.log("renderQuestions completed."); // Debug log
         }
 
-        function selectOption(qIndex, oIndex, type) {
+        function selectOption(qIndex, oIndex, type, clickedButton) {
+            console.log(`selectOption called: qIndex=${qIndex}, oIndex=${oIndex}, type=${type}`); // Debug log
             // Reset score for previous selection for this question
             if (userSelections[qIndex] !== undefined) {
                 const prevType = mbtiQuestions[qIndex].options[userSelections[qIndex]].type;
                 score[prevType]--;
+                console.log(`Deselected previous: ${prevType}, new score:`, score); // Debug log
             }
 
             // Set current selection and update score
             userSelections[qIndex] = oIndex;
             score[type]++;
+            console.log(`Selected: ${type}, new score:`, score, "UserSelections:", userSelections); // Debug log
 
             // Update button visual state
-            const questionItem = mbtiQuestionsContainer.children[qIndex];
-            if (questionItem) {
-                questionItem.querySelectorAll('.mbti-option-button').forEach((btn, idx) => {
-                    if (idx === oIndex) {
-                        btn.classList.add('selected');
-                    } else {
-                        btn.classList.remove('selected');
-                    }
-                });
-            }
+            clickedButton.closest('.mbti-options').querySelectorAll('.mbti-option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            clickedButton.classList.add('selected');
 
             // Check if all questions are answered
+            checkAllQuestionsAnswered();
+            console.log("selectOption completed."); // Debug log
+        }
+
+        function checkAllQuestionsAnswered() {
+            console.log("checkAllQuestionsAnswered called. Answered count:", Object.keys(userSelections).length, "Total questions:", mbtiQuestions.length); // Debug log
             if (Object.keys(userSelections).length === mbtiQuestions.length) {
                 mbtiSubmitButton.style.display = 'block';
+                console.log("All questions answered. Submit button shown."); // Debug log
             } else {
                 mbtiSubmitButton.style.display = 'none';
+                console.log("Not all questions answered. Submit button hidden."); // Debug log
             }
         }
 
@@ -450,10 +487,12 @@ document.addEventListener('DOMContentLoaded', () => {
             result += score["S"] > score["N"] ? "S" : "N";
             result += score["T"] > score["F"] ? "T" : "F";
             result += score["J"] > score["P"] ? "J" : "P";
+            console.log("Calculated MBTI:", result, "Final Score:", score); // Debug log
             return result;
         }
 
         function showResult() {
+            console.log("showResult called."); // Debug log
             const mbtiType = calculateMBTI();
             const description = mbtiResults[mbtiType] || "결과를 알 수 없습니다.";
             mbtiResultDiv.innerHTML = `
@@ -471,9 +510,11 @@ document.addEventListener('DOMContentLoaded', () => {
             mbtiResultDiv.style.display = 'block';
             mbtiRestartButton.style.display = 'block';
             mbtiStartButton.style.display = 'none'; // Ensure start button is hidden
+            console.log("Result displayed."); // Debug log
         }
 
         function resetTest() {
+            console.log("resetTest called."); // Debug log
             userSelections = {};
             score = { "E": 0, "I": 0, "S": 0, "N": 0, "T": 0, "F": 0, "J": 0, "P": 0 };
             mbtiResultDiv.style.display = 'none';
@@ -482,9 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
             mbtiQuestionsContainer.style.display = 'block';
             mbtiStartButton.style.display = 'block';
             mbtiSubmitButton.style.display = 'none';
+            console.log("Test reset."); // Debug log
         }
 
         mbtiStartButton.addEventListener('click', () => {
+            console.log("Start button clicked."); // Debug log
             mbtiStartButton.style.display = 'none';
             renderQuestions();
         });
@@ -494,5 +537,102 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initial state: show start button
         mbtiStartButton.style.display = 'block';
         mbtiQuestionsContainer.style.display = 'none';
+    }
+
+    // Tarot Reading Logic
+    const tarotReadingSection = document.getElementById('tarot-reading-section');
+    if (tarotReadingSection) {
+        const tarotCardsContainer = document.getElementById('tarot-cards-container');
+        const tarotReadButton = document.getElementById('tarot-read-button');
+        const tarotResultDiv = document.getElementById('tarot-result');
+        const tarotResultText = document.getElementById('tarot-result-text');
+        const tarotResetButton = document.getElementById('tarot-reset-button');
+
+        let selectedCards = [];
+        const numCardsToSelect = 3;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderTarotCards() {
+            tarotCardsContainer.innerHTML = '';
+            const shuffledCards = shuffleArray([...majorArcanaTarotCards]); // Shuffle a copy
+            selectedCards = []; // Reset selected cards
+
+            shuffledCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('tarot-card', 'face-down');
+                cardElement.dataset.cardIndex = index;
+                cardElement.dataset.cardName = card.name;
+                cardElement.innerHTML = `<div class="card-inner"><div class="card-back"></div><div class="card-front"><p>${card.name}</p></div></div>`;
+                cardElement.addEventListener('click', (event) => selectTarotCard(event.currentTarget, card));
+                tarotCardsContainer.appendChild(cardElement);
+            });
+            tarotReadButton.style.display = 'none';
+            tarotResultDiv.style.display = 'none';
+            tarotResetButton.style.display = 'none';
+        }
+
+        function selectTarotCard(cardElement, cardData) {
+            if (cardElement.classList.contains('revealed')) return; // Cannot select revealed cards
+
+            if (selectedCards.length < numCardsToSelect && !cardElement.classList.contains('selected')) {
+                cardElement.classList.add('selected');
+                selectedCards.push(cardData);
+
+                if (selectedCards.length === numCardsToSelect) {
+                    tarotReadButton.style.display = 'block';
+                    tarotCardsContainer.querySelectorAll('.tarot-card:not(.selected)').forEach(card => {
+                        card.classList.add('disabled'); // Disable unselected cards
+                    });
+                }
+            } else if (cardElement.classList.contains('selected')) {
+                // Deselect card
+                cardElement.classList.remove('selected');
+                selectedCards = selectedCards.filter(c => c.name !== cardData.name);
+                tarotReadButton.style.display = 'none';
+                tarotCardsContainer.querySelectorAll('.tarot-card.disabled').forEach(card => {
+                    card.classList.remove('disabled'); // Re-enable cards if deselecting
+                });
+            }
+        }
+
+        function readTarot() {
+            let resultHtml = '<h4>당신이 선택한 카드들:</h4><ul>';
+            const positions = ["과거의 흐름", "현재의 상황", "미래의 조언"];
+
+            selectedCards.forEach((card, index) => {
+                const cardElement = tarotCardsContainer.querySelector(`.tarot-card[data-card-name="${card.name}"]`);
+                if (cardElement) {
+                    cardElement.classList.remove('face-down');
+                    cardElement.classList.add('revealed');
+                }
+                resultHtml += `<li><strong>${index + 1}. ${positions[index]}: ${card.name}</strong> - ${card.meaning}</li>`;
+            });
+            resultHtml += '</ul><p>이 해석은 당신의 현재 상황과 미래의 가능성에 대한 깊은 통찰을 제공합니다. 카드의 메시지를 통해 현명한 선택을 하시길 바랍니다.</p>';
+            
+            tarotResultText.innerHTML = resultHtml;
+            tarotResultDiv.style.display = 'block';
+            tarotReadButton.style.display = 'none';
+            tarotResetButton.style.display = 'block';
+            tarotCardsContainer.querySelectorAll('.tarot-card').forEach(card => {
+                card.removeEventListener('click', selectTarotCard); // Disable further selection
+                card.classList.remove('disabled'); // Ensure all cards are clickable for reset
+            });
+        }
+
+        function resetTarot() {
+            renderTarotCards(); // Re-render to reset state
+        }
+
+        tarotReadButton.addEventListener('click', readTarot);
+        tarotResetButton.addEventListener('click', resetTarot);
+
+        renderTarotCards(); // Initial render of cards
     }
 });

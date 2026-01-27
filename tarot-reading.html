@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타로 카드 읽기 - Fatelink</title>
+    <meta name="description" content="직접 타로 카드를 선택하여 오늘의 운세와 삶의 지혜를 얻으세요. 당신의 선택이 운명을 밝혀줍니다.">
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" type="module" defer></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3633718154297262"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>타로 카드 읽기</h1>
+        <p>세 장의 카드를 선택하여 운명을 해석해보세요.</p>
+        <button id="theme-toggle"><span id="sun-icon">☀️</span> <span id="moon-icon">🌙</span></button>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">사주 운세 분석</a></li>
+            <li><a href="blog.html">운명의 해석</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="tarot-reading-section">
+            <h2>카드 선택</h2>
+            <p>아래 카드 중 세 장을 선택해주세요.</p>
+            <div id="tarot-cards-container">
+                <!-- Tarot cards will be generated here by JavaScript -->
+            </div>
+            <button id="tarot-read-button" style="display:none;">운세 보기</button>
+            <div id="tarot-result" style="display:none;">
+                <h3>당신의 운세</h3>
+                <p id="tarot-result-text"></p>
+            </div>
+            <button id="tarot-reset-button" style="display:none;">다시 하기</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 사주 운세 분석. All rights reserved.</p>
+        <p>
+            <a href="/privacy-policy.html">개인 정보 처리 방침</a> |
+            <a href="/terms-of-service.html">이용 약관</a>
+        </p>
+        <!-- IMPORTANT: Please create actual content for privacy-policy.html and terms-of-service.html pages. This is crucial for Google AdSense approval. -->
+    </footer>
+
+</body>
+</html>
