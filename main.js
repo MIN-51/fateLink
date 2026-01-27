@@ -434,7 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userSelections[qIndex] === oIndex) {
                         button.classList.add('selected');
                     }
-                    button.addEventListener('click', () => selectOption(qIndex, oIndex, option.type, button));
+                    button.addEventListener('click', () => {
+                        console.log(`Option button clicked for Q${qIndex}, Option ${oIndex}`); // Debug log
+                        selectOption(qIndex, oIndex, option.type, button);
+                    });
                     optionsContainer.appendChild(button);
                 });
                 questionElement.appendChild(optionsContainer);
