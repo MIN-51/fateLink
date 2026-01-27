@@ -111,14 +111,14 @@ class SajuResultDisplay extends HTMLElement {
                 p {
                     line-height: 1.6;
                 }
-                #month-buttons {
+                .fortune-category-buttons {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 10px;
                     justify-content: center;
                     margin-bottom: 20px;
                 }
-                #month-buttons button {
+                .fortune-category-buttons button {
                     padding: 8px 12px;
                     border-radius: 5px;
                     border: 1px solid var(--primary-color);
@@ -128,33 +128,57 @@ class SajuResultDisplay extends HTMLElement {
                     cursor: pointer;
                     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
                 }
-                #month-buttons button:hover, #month-buttons button.active {
+                .fortune-category-buttons button:hover, .fortune-category-buttons button.active {
                     background-color: var(--primary-color);
                     color: var(--button-text-color);
                 }
-                #monthly-fortune-text {
+                #general-fortune-text, #category-fortune-text {
                     text-align: center;
                     min-height: 40px;
+                }
+                #monthly-fortune-section {
+                    margin-top: 30px; /* Space between general and monthly fortune */
+                    border-top: 1px solid var(--component-border-color);
+                    padding-top: 20px;
+                }
+                 #monthly-fortune-section .fortune-category-buttons button:hover, #monthly-fortune-section .fortune-category-buttons button.active {
+                    background-color: var(--primary-color);
+                    color: var(--button-text-color);
                 }
             </style>
             <div id="result-container">
                 <h2>사주 분석 결과</h2>
-                <p id="result-text"></p>
+                <p id="general-fortune-text"></p>
                 
+                <div id="category-fortune-section">
+                    <h3>오늘의 운세 / 주간 운세 / 월간 운세 / 연간 운세</h3>
+                    <div class="fortune-category-buttons" id="time-period-buttons">
+                        <button data-category="daily">오늘의 운세</button>
+                        <button data-category="weekly">이번 주 운세</button>
+                        <button data-category="monthly">이번 달 운세</button>
+                        <button data-category="yearly">올해의 운세</button>
+                    </div>
+                    <p id="category-fortune-text"></p>
+                </div>
+
                 <div id="monthly-fortune-section">
                     <h3>월별 운세</h3>
                     <p>확인하고 싶은 월을 선택하세요.</p>
-                    <div id="month-buttons"></div>
+                    <div class="fortune-category-buttons" id="month-buttons"></div>
                     <p id="monthly-fortune-text"></p>
                 </div>
             </div>
         `;
 
+        this.generalFortuneText = this.shadowRoot.querySelector('#general-fortune-text');
+        this.categoryFortuneText = this.shadowRoot.querySelector('#category-fortune-text');
+        this.timePeriodButtonsContainer = this.shadowRoot.querySelector('#time-period-buttons');
         this.monthButtonsContainer = this.shadowRoot.querySelector('#month-buttons');
         this.monthlyFortuneText = this.shadowRoot.querySelector('#monthly-fortune-text');
 
         this._createMonthButtons();
         this._attachEventListeners();
+        this.currentSajuData = null; // To store sajuData for dynamic fortunes if needed later
     }
 
     _createMonthButtons() {
@@ -167,12 +191,25 @@ class SajuResultDisplay extends HTMLElement {
     }
 
     _attachEventListeners() {
+        // Event listener for daily/weekly/monthly/yearly fortune buttons
+        this.timePeriodButtonsContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const category = e.target.dataset.category;
+                this._showCategoryFortune(category);
+
+                this.timePeriodButtonsContainer.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            }
+        });
+
+        // Event listener for monthly fortune buttons (specific month)
         this.monthButtonsContainer.addEventListener('click', (e) => {
             if (e.target.tagName === 'BUTTON') {
                 const month = e.target.dataset.month;
                 this._showMonthlyFortune(month);
 
-                // Update active button style
                 this.monthButtonsContainer.querySelectorAll('button').forEach(btn => {
                     btn.classList.remove('active');
                 });
@@ -181,21 +218,47 @@ class SajuResultDisplay extends HTMLElement {
         });
     }
 
+    _showCategoryFortune(category) {
+        let fortuneText = "";
+        switch (category) {
+            case 'daily':
+                fortuneText = getDailyFortune();
+                break;
+            case 'weekly':
+                fortuneText = getWeeklyFortune();
+                break;
+            case 'monthly': // This is for 'current month' general fortune
+                fortuneText = getMonthlyFortune(new Date().getMonth() + 1); // Get current month's generic fortune
+                break;
+            case 'yearly':
+                fortuneText = getYearlyFortune();
+                break;
+            default:
+                fortuneText = "운세를 불러올 수 없습니다.";
+        }
+        this.categoryFortuneText.textContent = fortuneText;
+    }
+
     _showMonthlyFortune(month) {
         this.monthlyFortuneText.textContent = getMonthlyFortune(parseInt(month, 10));
     }
 
-    displayResult(result) {
+    displayResult(generalSajuResult) {
         const resultContainer = this.shadowRoot.querySelector('#result-container');
-        const resultText = this.shadowRoot.querySelector('#result-text');
-        resultText.innerHTML = result; // Support HTML for basic formatting
+        this.generalFortuneText.innerHTML = generalSajuResult; // Support HTML for basic formatting
         resultContainer.style.display = 'block';
 
-        // Set default to current month
-        const currentMonth = new Date().getMonth() + 1;
-        const currentMonthButton = this.monthButtonsContainer.querySelector(`[data-month="${currentMonth}"]`);
+        // Automatically click "이번 달 운세" button on display
+        const currentMonthButton = this.timePeriodButtonsContainer.querySelector(`[data-category="monthly"]`);
         if (currentMonthButton) {
             currentMonthButton.click();
+        }
+
+        // Set default to current specific month
+        const currentMonth = new Date().getMonth() + 1;
+        const currentSpecificMonthButton = this.monthButtonsContainer.querySelector(`[data-month="${currentMonth}"]`);
+        if (currentSpecificMonthButton) {
+            currentSpecificMonthButton.click();
         }
     }
 }
@@ -233,6 +296,18 @@ function getMonthlyFortune(month) {
         case 12: return "12월: 한 해를 마무리하며 주변 사람들에게 감사의 마음을 전하기 좋은 시기입니다.";
         default: return "";
     }
+}
+
+function getDailyFortune() {
+    return `오늘의 운세: 오늘은 새로운 아이디어가 샘솟는 하루가 될 것입니다. 주변 사람들과 공유하며 긍정적인 에너지를 만들어 보세요.`;
+}
+
+function getWeeklyFortune() {
+    return `이번 주 운세: 이번 주는 당신의 노력이 빛을 발하는 시기입니다. 꾸준히 해왔던 일에서 좋은 결과를 기대할 수 있습니다.`;
+}
+
+function getYearlyFortune() {
+    return `올해의 운세: 올해는 당신에게 성장과 변화의 기회가 가득한 한 해가 될 것입니다. 새로운 도전을 두려워 말고 적극적으로 임하세요.`;
 }
 
 function analyzeSaju(sajuData) {
