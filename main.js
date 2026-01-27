@@ -407,6 +407,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mbtiTestSection) {
         console.log("MBTI Test logic initiated."); // Debug log
         const mbtiQuestionsContainer = document.getElementById('mbti-questions');
+        // Use event delegation for MBTI options
+        mbtiQuestionsContainer.addEventListener('click', (event) => {
+            const clickedButton = event.target.closest('.mbti-option-button');
+            if (clickedButton) {
+                const qIndex = parseInt(clickedButton.dataset.questionIndex);
+                const oIndex = parseInt(clickedButton.dataset.optionIndex);
+                const type = mbtiQuestions[qIndex].options[oIndex].type;
+                selectOption(qIndex, oIndex, type, clickedButton);
+                console.log(`Delegated click detected for Q${qIndex}, Option ${oIndex}`); // Debug log
+            }
+        });
         const mbtiStartButton = document.getElementById('mbti-start-button');
         const mbtiSubmitButton = document.getElementById('mbti-submit-button');
         const mbtiResultDiv = document.getElementById('mbti-result');
@@ -434,10 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userSelections[qIndex] === oIndex) {
                         button.classList.add('selected');
                     }
-                    button.addEventListener('click', () => {
-                        console.log(`Option button clicked for Q${qIndex}, Option ${oIndex}`); // Debug log
-                        selectOption(qIndex, oIndex, option.type, button);
-                    });
+
                     optionsContainer.appendChild(button);
                 });
                 questionElement.appendChild(optionsContainer);
