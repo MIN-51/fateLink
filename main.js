@@ -307,11 +307,61 @@ function analyzeSaju(sajuData) {
 }
 
 // Theme switching logic
+// MBTI Test Questions and Logic
+const mbtiQuestions = [
+    {
+        question: "1. 주로 에너지를 어디에서 얻습니까?",
+        options: [
+            { text: "사람들과의 교류 (외향 E)", type: "E" },
+            { text: "혼자만의 시간 (내향 I)", type: "I" }
+        ]
+    },
+    {
+        question: "2. 세상을 인식하는 방법은 무엇입니까?",
+        options: [
+            { text: "오감에 의존한 현실적 정보 (감각 S)", type: "S" },
+            { text: "직관에 의존한 가능성, 의미 (직관 N)", type: "N" }
+        ]
+    },
+    {
+        question: "3. 판단이나 결정을 내릴 때 주로 무엇에 의존합니까?",
+        options: [
+            { text: "논리와 분석, 객관적인 사실 (사고 T)", type: "T" },
+            { text: "상황과의 조화, 사람과의 관계 (감정 F)", type: "F" }
+        ]
+    },
+    {
+        question: "4. 삶의 방식이 어떻습니까?",
+        options: [
+            { text: "계획적이고 체계적 (판단 J)", type: "J" },
+            { text: "유연하고 자율적 (인식 P)", type: "P" }
+        ]
+    }
+];
+
+const mbtiResults = {
+    "ISTJ": "청렴결백한 논리주의자, 세상의 소금형",
+    "ISFJ": "용감한 수호자, 이타주의의 표본",
+    "INFJ": "선의의 옹호자, 비전을 제시하는 예언가",
+    "INTJ": "용의주도한 전략가, 가장 독립적인 사색가",
+    "ISTP": "만능 재주꾼, 백과사전형",
+    "ISFP": "호기심 많은 예술가, 성인군자형",
+    "INFP": "열정적인 중재자, 이상을 꿈꾸는 잔다르크",
+    "INTP": "논리적인 사색가, 아이디어 뱅크형",
+    "ESTP": "모험을 즐기는 사업가, 수완 좋은 활동가",
+    "ESFP": "자유로운 영혼의 연예인, 분위기 메이커",
+    "ENFP": "재기발랄한 활동가, 분위기 조성자",
+    "ENTP": "뜨거운 논쟁을 즐기는 변론가, 지적인 탐험가",
+    "ESTJ": "엄격한 관리자, 타고난 리더",
+    "ESFJ": "사교적인 외교관, 친선도모형",
+    "ENFJ": "정의로운 사회운동가, 카리스마 넘치는 지도자",
+    "ENTJ": "대담한 통솔자, 비전을 가지고 진두지휘하는 리더"
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
 
-    // Apply saved theme on load
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         body.classList.add('light-theme');
@@ -325,4 +375,124 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', 'dark');
         }
     });
+
+    // MBTI Test Logic
+    const mbtiTestSection = document.getElementById('mbti-test-section');
+    if (mbtiTestSection) {
+        const mbtiQuestionsContainer = document.getElementById('mbti-questions');
+        const mbtiStartButton = document.getElementById('mbti-start-button');
+        const mbtiSubmitButton = document.getElementById('mbti-submit-button');
+        const mbtiResultDiv = document.getElementById('mbti-result');
+        const mbtiRestartButton = document.getElementById('mbti-restart-button');
+
+        let userSelections = {}; // Store selected type for each question index
+        let score = { "E": 0, "I": 0, "S": 0, "N": 0, "T": 0, "F": 0, "J": 0, "P": 0 };
+
+        function renderQuestions() {
+            mbtiQuestionsContainer.innerHTML = '';
+            mbtiQuestions.forEach((qData, qIndex) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('mbti-question-item');
+                questionElement.innerHTML = `<p>${qData.question}</p>`;
+                const optionsContainer = document.createElement('div');
+                optionsContainer.classList.add('mbti-options');
+
+                qData.options.forEach((option, oIndex) => {
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.classList.add('mbti-option-button');
+                    if (userSelections[qIndex] === oIndex) {
+                        button.classList.add('selected');
+                    }
+                    button.addEventListener('click', () => selectOption(qIndex, oIndex, option.type));
+                    optionsContainer.appendChild(button);
+                });
+                questionElement.appendChild(optionsContainer);
+                mbtiQuestionsContainer.appendChild(questionElement);
+            });
+            mbtiSubmitButton.style.display = 'none'; // Hide submit until all answered
+        }
+
+        function selectOption(qIndex, oIndex, type) {
+            // Reset score for previous selection for this question
+            if (userSelections[qIndex] !== undefined) {
+                const prevType = mbtiQuestions[qIndex].options[userSelections[qIndex]].type;
+                score[prevType]--;
+            }
+
+            // Set current selection and update score
+            userSelections[qIndex] = oIndex;
+            score[type]++;
+
+            // Update button visual state
+            const questionItem = mbtiQuestionsContainer.children[qIndex];
+            if (questionItem) {
+                questionItem.querySelectorAll('.mbti-option-button').forEach((btn, idx) => {
+                    if (idx === oIndex) {
+                        btn.classList.add('selected');
+                    } else {
+                        btn.classList.remove('selected');
+                    }
+                });
+            }
+
+            // Check if all questions are answered
+            if (Object.keys(userSelections).length === mbtiQuestions.length) {
+                mbtiSubmitButton.style.display = 'block';
+            } else {
+                mbtiSubmitButton.style.display = 'none';
+            }
+        }
+
+        function calculateMBTI() {
+            let result = "";
+            result += score["E"] > score["I"] ? "E" : "I";
+            result += score["S"] > score["N"] ? "S" : "N";
+            result += score["T"] > score["F"] ? "T" : "F";
+            result += score["J"] > score["P"] ? "J" : "P";
+            return result;
+        }
+
+        function showResult() {
+            const mbtiType = calculateMBTI();
+            const description = mbtiResults[mbtiType] || "결과를 알 수 없습니다.";
+            mbtiResultDiv.innerHTML = `
+                <h3>당신의 MBTI 유형은 <strong>${mbtiType}</strong> 입니다!</h3>
+                <p>(${description})</p>
+                <p>이 결과는 간이 테스트이며, 심층적인 분석과는 다를 수 있습니다. MBTI는 자신을 이해하는 도구로 활용해 보세요.</p>
+                <h4>${mbtiType} 유형에 대한 추가 정보:</h4>
+                <p><strong>연애 스타일:</strong> ${mbtiType} 유형은 연애에서 ... (이 부분에 'MBTI 유형별 연애가 힘든 이유와 해결책' 글의 핵심 내용을 요약하거나 링크를 추가)</p>
+                <p><strong>직업 적합성:</strong> ${mbtiType} 유형은 ... (직업 관련 내용 요약)</p>
+                <p><strong>강점 및 약점:</strong> ${mbtiType} 유형은 ... (강점/약점 요약)</p>
+                <p>더 자세한 정보는 <a href="mbti-love.html">MBTI 유형별 연애가 힘든 이유와 해결책</a> 글을 참조하세요.</p>
+            `;
+            mbtiQuestionsContainer.style.display = 'none';
+            mbtiSubmitButton.style.display = 'none';
+            mbtiResultDiv.style.display = 'block';
+            mbtiRestartButton.style.display = 'block';
+            mbtiStartButton.style.display = 'none'; // Ensure start button is hidden
+        }
+
+        function resetTest() {
+            userSelections = {};
+            score = { "E": 0, "I": 0, "S": 0, "N": 0, "T": 0, "F": 0, "J": 0, "P": 0 };
+            mbtiResultDiv.style.display = 'none';
+            mbtiRestartButton.style.display = 'none';
+            mbtiQuestionsContainer.innerHTML = '';
+            mbtiQuestionsContainer.style.display = 'block';
+            mbtiStartButton.style.display = 'block';
+            mbtiSubmitButton.style.display = 'none';
+        }
+
+        mbtiStartButton.addEventListener('click', () => {
+            mbtiStartButton.style.display = 'none';
+            renderQuestions();
+        });
+        mbtiSubmitButton.addEventListener('click', showResult);
+        mbtiRestartButton.addEventListener('click', resetTest);
+
+        // Initial state: show start button
+        mbtiStartButton.style.display = 'block';
+        mbtiQuestionsContainer.style.display = 'none';
+    }
 });
