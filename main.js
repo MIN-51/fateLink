@@ -313,6 +313,7 @@ function getYearlyFortune() {
 function analyzeSaju(sajuData) {
     const { year, month, day, time, gender } = sajuData;
     const zodiacs = ["원숭이", "닭", "개", "돼지", "쥐", "소", "호랑이", "토끼", "용", "뱀", "말", "양"];
+    const timeNames = ["자시", "축시", "인시", "묘시", "진시", "사시", "오시", "미시", "신시", "유시", "술시", "해시"];
     const zodiac = zodiacs[year % 12];
 
     let fortune = `<h3>${year}년 ${month}월 ${day}일 ${timeNames[time]}에 태어난 당신의 사주를 분석해 드립니다.</h3><br>`;
