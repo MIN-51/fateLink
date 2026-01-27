@@ -537,12 +537,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Test reset."); // Debug log
         }
 
-        mbtiStartButton.addEventListener('click', () => {
-            console.log("Start button clicked."); // Debug log
-            mbtiStartButton.style.display = 'none';
-            renderQuestions();
-        });
-        mbtiSubmitButton.addEventListener('click', showResult);
+                    mbtiStartButton.addEventListener('click', () => {
+                        console.log("Start button clicked."); // Debug log
+                        mbtiStartButton.style.display = 'none';
+                        mbtiQuestionsContainer.style.display = 'block'; // Make questions visible
+                        renderQuestions();
+                    });        mbtiSubmitButton.addEventListener('click', showResult);
         mbtiRestartButton.addEventListener('click', resetTest);
 
         // Initial state: show start button
