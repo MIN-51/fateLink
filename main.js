@@ -119,31 +119,36 @@ class SajuResultDisplay extends HTMLElement {
                     margin-bottom: 20px;
                 }
                 .fortune-category-buttons button {
-                    padding: 8px 12px;
-                    border-radius: 5px;
+                    padding: 10px 15px; /* Adjusted padding */
+                    border-radius: 8px; /* More rounded */
                     border: 1px solid var(--primary-color);
                     background-color: transparent;
                     color: var(--primary-color);
-                    font-size: 0.9rem;
+                    font-size: 1rem; /* Slightly larger font */
                     cursor: pointer;
-                    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+                    transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+                    min-width: 100px; /* Ensure consistent button width */
                 }
-                .fortune-category-buttons button:hover, .fortune-category-buttons button.active {
+                .fortune-category-buttons button:hover {
+                    transform: translateY(-2px); /* Slight lift on hover */
+                }
+                .fortune-category-buttons button.active {
                     background-color: var(--primary-color);
                     color: var(--button-text-color);
+                    box-shadow: 0 0 10px var(--primary-color-hover); /* Added shadow for active */
                 }
                 #general-fortune-text, #category-fortune-text {
                     text-align: center;
                     min-height: 40px;
+                    padding: 10px;
+                    margin-top: 20px;
+                    border: 1px dashed var(--component-border-color); /* Added border for definition */
+                    border-radius: 8px;
                 }
-                #monthly-fortune-section {
-                    margin-top: 30px; /* Space between general and monthly fortune */
-                    border-top: 1px solid var(--component-border-color);
+                #category-fortune-section {
+                    margin-top: 30px; /* Space above section */
                     padding-top: 20px;
-                }
-                 #monthly-fortune-section .fortune-category-buttons button:hover, #monthly-fortune-section .fortune-category-buttons button.active {
-                    background-color: var(--primary-color);
-                    color: var(--button-text-color);
+                    border-top: 1px solid var(--component-border-color); /* Separator line */
                 }
             </style>
             <div id="result-container">
@@ -151,7 +156,7 @@ class SajuResultDisplay extends HTMLElement {
                 <p id="general-fortune-text"></p>
                 
                 <div id="category-fortune-section">
-                    <h3>오늘의 운세 / 주간 운세 / 월간 운세 / 연간 운세</h3>
+                    <h3>오늘 / 주간 / 월간 / 연간 운세</h3>
                     <div class="fortune-category-buttons" id="time-period-buttons">
                         <button data-category="daily">오늘의 운세</button>
                         <button data-category="weekly">이번 주 운세</button>
@@ -160,35 +165,18 @@ class SajuResultDisplay extends HTMLElement {
                     </div>
                     <p id="category-fortune-text"></p>
                 </div>
-
-                <div id="monthly-fortune-section">
-                    <h3>월별 운세</h3>
-                    <p>확인하고 싶은 월을 선택하세요.</p>
-                    <div class="fortune-category-buttons" id="month-buttons"></div>
-                    <p id="monthly-fortune-text"></p>
-                </div>
             </div>
         `;
 
         this.generalFortuneText = this.shadowRoot.querySelector('#general-fortune-text');
         this.categoryFortuneText = this.shadowRoot.querySelector('#category-fortune-text');
         this.timePeriodButtonsContainer = this.shadowRoot.querySelector('#time-period-buttons');
-        this.monthButtonsContainer = this.shadowRoot.querySelector('#month-buttons');
-        this.monthlyFortuneText = this.shadowRoot.querySelector('#monthly-fortune-text');
-
-        this._createMonthButtons();
+        // Removed month-specific elements
         this._attachEventListeners();
         this.currentSajuData = null; // To store sajuData for dynamic fortunes if needed later
     }
 
-    _createMonthButtons() {
-        for (let i = 1; i <= 12; i++) {
-            const button = document.createElement('button');
-            button.textContent = `${i}월`;
-            button.dataset.month = i;
-            this.monthButtonsContainer.appendChild(button);
-        }
-    }
+    // Removed _createMonthButtons()
 
     _attachEventListeners() {
         // Event listener for daily/weekly/monthly/yearly fortune buttons
@@ -203,19 +191,7 @@ class SajuResultDisplay extends HTMLElement {
                 e.target.classList.add('active');
             }
         });
-
-        // Event listener for monthly fortune buttons (specific month)
-        this.monthButtonsContainer.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                const month = e.target.dataset.month;
-                this._showMonthlyFortune(month);
-
-                this.monthButtonsContainer.querySelectorAll('button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                e.target.classList.add('active');
-            }
-        });
+        // Removed event listener for monthly fortune buttons (specific month)
     }
 
     _showCategoryFortune(category) {
@@ -239,9 +215,7 @@ class SajuResultDisplay extends HTMLElement {
         this.categoryFortuneText.textContent = fortuneText;
     }
 
-    _showMonthlyFortune(month) {
-        this.monthlyFortuneText.textContent = getMonthlyFortune(parseInt(month, 10));
-    }
+    // Removed _showMonthlyFortune()
 
     displayResult(generalSajuResult) {
         const resultContainer = this.shadowRoot.querySelector('#result-container');
@@ -254,12 +228,7 @@ class SajuResultDisplay extends HTMLElement {
             currentMonthButton.click();
         }
 
-        // Set default to current specific month
-        const currentMonth = new Date().getMonth() + 1;
-        const currentSpecificMonthButton = this.monthButtonsContainer.querySelector(`[data-month="${currentMonth}"]`);
-        if (currentSpecificMonthButton) {
-            currentSpecificMonthButton.click();
-        }
+        // Removed default click for specific month
     }
 }
 
