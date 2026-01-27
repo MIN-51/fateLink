@@ -162,3 +162,30 @@ saju-input-form, saju-result-display {
         padding: 20px;
     }
 }
+
+footer {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+    border-top: 1px solid var(--component-border-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: var(--primary-color-hover);
+    text-decoration: underline;
+}
