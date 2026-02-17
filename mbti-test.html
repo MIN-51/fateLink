@@ -27,6 +27,19 @@
     </nav>
 
     <main>
+        <section id="mbti-intro">
+            <h2>MBTI란 무엇일까요?</h2>
+            <p>MBTI(Myers-Briggs Type Indicator)는 이사벨 마이어스(Isabel Myers)와 캐서린 브릭스(Katharine Briggs)가 칼 융(Carl Jung)의 성격 이론을 기반으로 개발한 자기 보고식 성격 유형 검사입니다. 사람들의 선호도를 네 가지 이분법적 척도로 나누어 16가지 성격 유형 중 하나로 분류합니다.</p>
+            <p>이 검사는 개인이 자신의 강점과 약점을 이해하고, 다른 사람들과의 관계를 개선하며, 직업 선택 및 경력 개발에 도움을 줄 수 있는 통찰력을 제공합니다. MBTI는 절대적인 평가가 아닌, 자신을 더 깊이 이해하기 위한 하나의 도구임을 기억하는 것이 중요합니다.</p>
+            <h3>네 가지 선호 지표</h3>
+            <ul>
+                <li><strong>에너지 방향 (E/I):</strong> 외향(Extraversion)과 내향(Introversion)은 개인이 어디에서 에너지를 얻는지를 나타냅니다. 외향형은 다른 사람들과의 교류에서, 내향형은 내면 세계에서 에너지를 얻습니다.</li>
+                <li><strong>인식 기능 (S/N):</strong> 감각(Sensing)과 직관(iNtuition)은 정보를 어떻게 인식하고 받아들이는지를 보여줍니다. 감각형은 오감을 통한 사실적 정보에, 직관형은 패턴과 가능성에 더 주목합니다.</li>
+                <li><strong>판단 기능 (T/F):</strong> 사고(Thinking)와 감정(Feeling)은 어떻게 결정을 내리는지에 대한 경향입니다. 사고형은 논리와 객관적 사실을, 감정형은 사람과 관계를 중시하여 결정합니다.</li>
+                <li><strong>생활 양식 (J/P):</strong> 판단(Judging)과 인식(Perceiving)은 외부 세계에 대처하는 방식을 나타냅니다. 판단형은 계획적이고 체계적인 삶을, 인식형은 자율적이고 유연한 삶을 선호합니다.</li>
+            </ul>
+        </section>
+
         <section id="mbti-test-section">
             <h2>MBTI 간이 테스트 시작</h2>
             <div id="mbti-questions">
@@ -38,6 +51,30 @@
                 <!-- Result will be displayed here -->
             </div>
             <button id="mbti-restart-button" style="display:none;">다시 테스트하기</button>
+        </section>
+
+        <section id="mbti-types-info">
+            <h2>16가지 성격 유형 알아보기</h2>
+            <p>테스트를 통해 자신의 유형을 확인하고, 아래에서 해당 유형에 대한 자세한 설명을 읽어보세요. 각 유형은 고유한 강점과 잠재력을 가지고 있습니다.</p>
+            <div class="type-grid">
+                <div class="type-card"><strong>ISTJ</strong> - 청렴결백한 논리주의자</div>
+                <div class="type-card"><strong>ISFJ</strong> - 용감한 수호자</div>
+                <div class="type-card"><strong>INFJ</strong> - 선의의 옹호자</div>
+                <div class="type-card"><strong>INTJ</strong> - 용의주도한 전략가</div>
+                <div class="type-card"><strong>ISTP</strong> - 만능 재주꾼</div>
+                <div class="type-card"><strong>ISFP</strong> - 호기심 많은 예술가</div>
+                <div class="type-card"><strong>INFP</strong> - 열정적인 중재자</div>
+                <div class="type-card"><strong>INTP</strong> - 논리적인 사색가</div>
+                <div class="type-card"><strong>ESTP</strong> - 모험을 즐기는 사업가</div>
+                <div class="type-card"><strong>ESFP</strong> - 자유로운 영혼의 연예인</div>
+                <div class="type-card"><strong>ENFP</strong> - 재기발랄한 활동가</div>
+                <div class="type-card"><strong>ENTP</strong> - 뜨거운 논쟁을 즐기는 변론가</div>
+                <div class="type-card"><strong>ESTJ</strong> - 엄격한 관리자</div>
+                <div class="type-card"><strong>ESFJ</strong> - 사교적인 외교관</div>
+                <div class="type-card"><strong>ENFJ</strong> - 정의로운 사회운동가</div>
+                <div class="type-card"><strong>ENTJ</strong> - 대담한 통솔자</div>
+            </div>
+            <p style="margin-top: 1rem;">* JavaScript 파일에서 각 유형별 상세 설명을 로드하여 결과에 표시할 수 있습니다. 예를 들어, 결과로 INFP가 나오면 해당 유형의 특징, 강점, 약점, 추천 직업, 연애 스타일 등을 상세히 보여주는 방식입니다.</p>
         </section>
     </main>
 
