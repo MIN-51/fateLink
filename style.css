@@ -616,7 +616,7 @@ footer a:hover {
     .tarot-card {
         width: 80px;
         height: 120px;
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
     .card-back {
         font-size: 1.2rem;
@@ -659,7 +659,7 @@ footer a:hover {
     border-collapse: collapse;
     width: 100%;
     min-width: 600px; /* Prevent wrapping on small screens */
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .mbti-chart th, .mbti-chart td {
