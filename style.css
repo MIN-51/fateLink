@@ -659,14 +659,15 @@ footer a:hover {
     border-collapse: collapse;
     width: 100%;
     min-width: 600px; /* Prevent wrapping on small screens */
-    font-size: 1rem;
+    font-size: 0.7rem;
 }
 
 .mbti-chart th, .mbti-chart td {
     border: 1px solid var(--component-border-color);
     text-align: center;
     padding: 5px;
-    height: 30px;
+    height: 35px; /* Slightly increased height for better spacing */
+    vertical-align: middle;
 }
 
 .mbti-chart th {
@@ -681,7 +682,6 @@ footer a:hover {
 
 .mbti-chart td {
     color: #fff; /* White text for better contrast on colors */
-    font-weight: bold;
 }
 
 .mbti-compat-1 { background-color: #0d47a1; } /* Best (dark blue) */
