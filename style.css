@@ -648,3 +648,89 @@ footer a:hover {
         padding: 20px;
     }
 }
+
+/* MBTI Compatibility Chart Styles */
+.mbti-chart-container {
+    overflow-x: auto; /* For small screens */
+    margin: 30px 0;
+}
+
+.mbti-chart {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px; /* Prevent wrapping on small screens */
+    font-size: 0.8rem;
+}
+
+.mbti-chart th, .mbti-chart td {
+    border: 1px solid var(--component-border-color);
+    text-align: center;
+    padding: 5px;
+    height: 30px;
+}
+
+.mbti-chart th {
+    background-color: var(--component-bg-color);
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.mbti-chart .header-cell {
+    width: 40px;
+}
+
+.mbti-chart td {
+    color: #fff; /* White text for better contrast on colors */
+    font-weight: bold;
+}
+
+.mbti-compat-1 { background-color: #0d47a1; } /* Best (dark blue) */
+.mbti-compat-2 { background-color: #1976d2; } /* Good (blue) */
+.mbti-compat-3 { background-color: #4caf50; } /* Okay (green) */
+.mbti-compat-4 { background-color: #ff9800; } /* Needs Improvement (orange) */
+.mbti-compat-5 { background-color: #d32f2f; } /* Worst (red) */
+
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border-radius: 4px;
+}
+
+/* Tarot Card Images in Blog */
+.tarot-card-entry {
+    margin-bottom: 20px;
+}
+
+.tarot-card-entry::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.tarot-card-image {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    float: left;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
