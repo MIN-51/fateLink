@@ -734,3 +734,13 @@ footer a:hover {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
+
+/* Responsive adjustments for images within type-card */
+.type-card img {
+    width: 100%;
+    max-width: 80px; /* Adjust this value if needed */
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
